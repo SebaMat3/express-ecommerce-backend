@@ -8,7 +8,7 @@ const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/err
 
 // creamos una aplicación, asignando el método constructor express()
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //middleware
 app.use(express.json());
@@ -18,7 +18,7 @@ routerApi(app);
 const whitelist = ['http://localhost:3000', 'https://myapp.com'];
 const options = {
   origin: (origin, callback) => {
-    if (whitelist.includes(origin)) {
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('not allowed'));
@@ -28,11 +28,11 @@ const options = {
 
 app.use(cors(options));
 
-app.get("/", (req, res) => {
-  res.send("Mi server en Express");
+app.get("/api", (req, res) => {
+  res.send("My express server");
 })
-app.get("/nueva-ruta", (req, res) => {
-  res.send("Bienvenido a la nueva ruta!");
+app.get("/api/new-path", (req, res) => {
+  res.send("Welcome to the new path!");
 })
 
 app.use(logErrors);
