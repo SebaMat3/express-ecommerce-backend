@@ -1,66 +1,80 @@
 const express = require('express');
-const { faker } = require('@faker-js/faker');
-
 const router = express.Router();
+const UserService = require('./../services/users.service');
+const validatorHandler = require('./../middlewares/validator.handler');
+const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema');
+
+
+const service = new UserService();
+
 
 //READ users
 
-router.get('/', (req, res) => {
-	const users = [];
-	const {size} = req.query;
-	const limit = size || 10;
-	for (let i = 0; i < limit; i++) {
-		users.push({
-			name: faker.person.firstName(),
-			lastName: faker.person.lastName(),
-			image: faker.image.url(),
-		});
-	}
-res.json(users);
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await service.find();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
 });
-
 //READ user
 
-router.get('/:id', (req, res) => {
-	const { id } = req.params;
-	res.json({
-		id,
-    name: faker.person.firstName(),
-		lastName: faker.person.lastName(),
-		image: faker.image.url(),
-	});
-});
+router.get('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const category = await service.findOne(id);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //CREATE
-
-router.post('/', (req, res) => {
-	const body = req.body;
-	res.json({
-		message: 'Creation',
-		data: body
-	});
-});
+router.post('/',
+  validatorHandler(createUserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCategory = await service.create(body);
+      res.status(201).json(newCategory);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //UPDATE
-
-router.patch('/:id', (req, res) => {
-	const { id } = req.params;
-	const body = req.body;
-	res.json({
-		message: 'Update',
-		data: body,
-		id
-	});
-});
+router.patch('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(updateUserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const category = await service.update(id, body);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //DELETE
-
-router.delete('/:id', (req, res) => {
-	const { id } = req.params;
-	res.json({
-		message: 'deleted element',
-		id
-	});
-});
+router.delete('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({id});
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

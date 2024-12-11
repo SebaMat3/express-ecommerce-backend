@@ -1,4 +1,4 @@
-//schemas/products.schema.js
+//schemas/product.schema.js
 const Joi = require ('joi');
 
 //isolated reusable fields

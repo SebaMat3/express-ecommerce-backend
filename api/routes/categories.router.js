@@ -2,7 +2,7 @@
 
 // imports of Modules
 const express = require('express');
-const CategoriesService = require('../services/categories.services');
+const CategoriesService = require('../services/categories.service');
 
 // instace of class
 const router = express.Router();
