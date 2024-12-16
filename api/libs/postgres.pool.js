@@ -3,13 +3,12 @@ const { Pool } = require("pg");
 //const { host, port } = require("pg/lib/defaults");
 require('dotenv').config();
 
-const pool = new Pool ({
-    host: process.env.PG_HOST || 'localhost',
-    port: 5432,
-    database: process.env.PG_DB,
-    user: process.env.PG_USER,
-    password: process.env.PG_PASS
-  });
+const { config } = require('./../config/config');
 
+const USER = encodeURIComponent(config.dbUser);
+const PASSWORD = encodeURIComponent(config.dbPassword);
+const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+
+const pool = new Pool({ connectionString: URI });
 
 module.exports = pool;
