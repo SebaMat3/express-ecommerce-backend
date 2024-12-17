@@ -3,7 +3,7 @@ const express = require("express");
 const routerApi = require("./routes");
 const cors = require("cors");
 
-const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
+const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
 
 // creamos una aplicación, asignando el método constructor express()
@@ -36,6 +36,7 @@ app.get("/api/new-path", (req, res) => {
 })
 
 app.use(logErrors);
+app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
