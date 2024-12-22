@@ -13,7 +13,9 @@ class UserService {
   }
 
   async find() {
-    const res = await models.User.findAll()
+    const res = await models.User.findAll({
+      include: ['customer']
+    });
     return res;
   }
 
@@ -21,7 +23,7 @@ class UserService {
     const user = await models.User.findByPk(id);
     if (!user) {
       throw boom.notFound('User not found');
-    }
+    };
     return user;
   }
 

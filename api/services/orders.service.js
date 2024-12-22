@@ -1,6 +1,8 @@
+//api/services/order.service.js
+
 const boom = require('@hapi/boom');
 
-class CategoryService {
+class OrderService {
 
   constructor(){
   }
@@ -29,4 +31,4 @@ class CategoryService {
 
 }
 
-module.exports = CategoryService;
+module.exports = OrderService;
