@@ -2,11 +2,12 @@
 const Joi = require ('joi');
 
 //isolated reusable fields
-const id = Joi.string().uuid();
-const name = Joi.string().min(3).max(15);
+const id = Joi.number().integer();
+const name = Joi.string().min(3).max(40);
 const price = Joi.number().integer().min(10);
 const description = Joi.string().min(10)
 const image = Joi.string().uri();
+const categoryId = Joi.number().integer();
 
 //schemas
 const createProductSchema = Joi.object({
@@ -14,13 +15,15 @@ const createProductSchema = Joi.object({
   price: price.required(),
   image: image.required(),
   description: description.required(),
+  categoryId: categoryId.required(),
 });
 
 const updateProductSchema = Joi.object({
 	name: name,
   price: price,
   image: image,
-  description: description
+  description: description,
+  categoryId: categoryId
 });
 
 const getProductSchema = Joi.object({
