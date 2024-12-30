@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch api/index.js",
+    "prebuild": "npm run migrations:run",
     "start": "node api/index.js",
     "lint": "eslint",
     "migrations:generate" : "sequelize-cli migration:generate --name",
@@ -19,8 +20,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "nodemon": "^3.1.7",
-    "prettier": "^3.3.3",
-    "sequelize-cli": "^6.6.2"
+    "prettier": "^3.3.3"
   },
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
@@ -33,6 +33,7 @@
     "mysql2": "^3.11.5",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2"
   }
 }

@@ -3,12 +3,15 @@ require('dotenv').config();
 
 const config = {
 	env: process.env.NODE_ENV || 'dev',
+  isProd: process.env.NODE_ENV === 'production',
 	port: process.env.PORT || 3000,
-	dbUser: process.env.PG_USER,
-	dbPassword: process.env.PG_PASS,
-	dbHost: process.env.DB_HOST,
-	dbName: process.env.PG_DB,
-	dbPort: process.env.DB_PORT,
+	dbUser: process.env.PGUSER,
+	dbPassword: process.env.PGPASSWORD,
+	dbHost: process.env.PGHOST,
+	dbPort: process.env.PGPORT,
+	dbName: process.env.PGDATABASE,
+  dbUrl: process.env.DATABASE_URL,
 }
 
 module.exports = { config };
+

@@ -1,14 +1,20 @@
 //libs/postgres.pool.js
 const { Pool } = require("pg");
-//const { host, port } = require("pg/lib/defaults");
-require('dotenv').config();
-
 const { config } = require('./../config/config');
 
-const USER = encodeURIComponent(config.dbUser);
-const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+require('dotenv').config();
 
-const pool = new Pool({ connectionString: URI });
+const options = {};
+
+if (config.isProd){
+  options.connectionString = config.dbUrl;
+} else {
+  const USER = encodeURIComponent(config.dbUser);
+  const PASSWORD = encodeURIComponent(config.dbPassword);
+  URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+  options.connectionString = URI;
+}
+
+const pool = new Pool(options);
 
 module.exports = pool;

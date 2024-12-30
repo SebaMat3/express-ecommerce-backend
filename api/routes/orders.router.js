@@ -6,11 +6,14 @@ const validatorHandler = require('../middlewares/validator.handler');
 const {
   createOrderSchema,
   getOrderSchema,
-  updateOrderSchema
+  updateOrderSchema,
+  addItemSchema
 } = require('../schemas/order.schema');
 
 const router = express.Router();
 const service = new OrderService();
+
+
 
 router.get('/:id',
   validatorHandler(getOrderSchema, 'params'),
@@ -58,6 +61,19 @@ router.delete('/:id',
     try {
       const { id } = req.params;
       res.status(200).json(await service.delete(id));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//Order items
+router.post('/add-item',
+  validatorHandler(addItemSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      res.status(201).json(await service.addItem(body));
     } catch (error) {
       next(error);
     }
