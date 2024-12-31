@@ -12,7 +12,8 @@ const options = {
 
 if (config.isProd) {
   options.dialectOptions = {
-	  ssl : true
+	  ssl : {
+		  require : true
 	}
 }
 
