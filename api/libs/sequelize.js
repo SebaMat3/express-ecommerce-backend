@@ -13,7 +13,9 @@ const options = {
 if (config.isProd) {
   options.dialectOptions = {
 	  ssl : {
-		  require : true
+		  require : true,
+      rejectUnauthorized: true,
+      ca: process.env.CA_CERT
     }
   }
 }
