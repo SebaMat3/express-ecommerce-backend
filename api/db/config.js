@@ -1,13 +1,15 @@
 //api/db/config.js
 const { config } = require('../config/config');
 
+const URI = config.dbUrl;
+
 module.exports = {
   development: {
     url: config.dbUrl,
     dialect: 'postgres',
   },
   production: {
-    url: config.dbUrl,
+    url: URI,
     dialect: 'postgres',
     dialectOptions: {
       ssl: {
@@ -15,6 +17,6 @@ module.exports = {
         rejectUnauthorized: false
       }
     }
-  },
+  }
 };
 

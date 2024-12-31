@@ -25,23 +25,7 @@ if (config.isProd) {
   };
 }
 
-// Log the configuration (temporary for debugging)
-console.log('Database URL:', config.dbUrl);
-console.log('Is Production:', config.isProd);
-console.log('Connection Options:', JSON.stringify(options, null, 2));
-
-
 const sequelize = new Sequelize (config.dbUrl, options)
-
-// Test the connection
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Database connection successfully established.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
 
 setupModels(sequelize);
 
