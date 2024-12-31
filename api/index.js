@@ -6,7 +6,6 @@ const cors = require("cors");
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
 
-// creamos una aplicación, asignando el método constructor express()
 const app = express();
 const port = process.env.PORT || 3000;
 

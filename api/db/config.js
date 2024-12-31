@@ -10,8 +10,11 @@ module.exports = {
     url: config.dbUrl,
     dialect: 'postgres',
     dialectOptions: {
-      ssl: true
-    },
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   },
 };
 

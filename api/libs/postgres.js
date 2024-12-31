@@ -5,16 +5,14 @@ require('dotenv').config();
 
 async function getConnection() {
   const client = new Client({
-    host: process.env.PG_HOST || 'localhost',
-    port: 5432,
-    database: process.env.PG_DB,
-    user: process.env.PG_USER,
-    password: process.env.PG_PASS
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? {
+      rejectUnauthorized: false
+    } : false
   });
 
   await client.connect();
   return client;
-
 }
 
 module.exports = getConnection;

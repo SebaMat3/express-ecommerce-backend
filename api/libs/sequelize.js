@@ -18,13 +18,11 @@ const options = {
 
 if (config.isProd) {
   options.dialectOptions = {
-	  ssl : {
-		  require : true,
-      rejectUnauthorized: true
-    },
-    keepAlive: true,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   };
-  options.ssl = true;
 }
 
 // Log the configuration (temporary for debugging)
