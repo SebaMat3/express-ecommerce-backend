@@ -13,7 +13,7 @@
     "migrations:delete": "sequelize-cli db:migrate:undo:all",
     "migrations:run:prod": "sequelize-cli db:migrate --env production",
     "migrations:revert:prod": "sequelize-cli db:migrate:undo --env production",
-    "migrations:delete:prod": "sequelize-cli db:migrate:undo:all --env production"
+    "migrations:delete:prod": "sequelize-cli db:migrate:undo:all --env production --config ./api/db/config.js"
   },
   "author": "",
   "license": "ISC",

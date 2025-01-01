@@ -32,17 +32,6 @@ module.exports = {
         type: DataTypes.STRING,
         defaultValue: 'customer'
       },
-      recoveryToken: {
-        field: 'recovery_token',
-        allowNull: true,
-        type: DataTypes.STRING
-      },
-      isVerified: {
-        field: 'is_verified',
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
@@ -51,7 +40,32 @@ module.exports = {
       }
     });
 
-    // 2. Customers (depends on Users)
+    // 2. Categories (no dependencies)
+    await queryInterface.createTable(CATEGORY_TABLE, {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.NOW,
+      }
+    });
+
+    // 3. Customers (depends on Users)
     await queryInterface.createTable(CUSTOMER_TABLE, {
       id: {
         allowNull: false,
@@ -61,29 +75,16 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       lastName: {
         allowNull: false,
         type: DataTypes.STRING,
-        field: 'last_name'
+        field: 'last_name',
       },
       phone: {
         allowNull: true,
-        type: DataTypes.STRING
-      },
-      address: {
-        allowNull: true,
-        type: DataTypes.STRING
-      },
-      city: {
-        allowNull: true,
-        type: DataTypes.STRING
-      },
-      postalCode: {
-        field: 'postal_code',
-        allowNull: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       userId: {
         field: 'user_id',
@@ -101,28 +102,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-
-    // 3. Categories (no dependencies)
-    await queryInterface.createTable(CATEGORY_TABLE, {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        unique: true
-      },
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        field: 'created_at',
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       }
     });
 
@@ -135,30 +115,20 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       name: {
+        type: DataTypes.STRING,
         allowNull: false,
-        type: DataTypes.STRING
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       description: {
+        type: DataTypes.TEXT,
         allowNull: false,
-        type: DataTypes.TEXT
       },
       price: {
-        allowNull: false,
-        type: DataTypes.DECIMAL(10, 2)
-      },
-      stock: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0
-      },
-      status: {
-        type: DataTypes.ENUM('active', 'inactive'),
-        defaultValue: 'active'
-      },
-      sku: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
       },
       categoryId: {
         field: 'category_id',
@@ -175,7 +145,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       }
     });
 
@@ -198,26 +168,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      status: {
-        type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
-        defaultValue: 'pending'
-      },
-      total: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0
-      },
-      shippingAddress: {
-        field: 'shipping_address',
-        type: DataTypes.STRING,
-        allowNull: true
-      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       }
+      // Note: total is VIRTUAL in the model, so it's not in the migration
     });
 
     // 6. Order-Products (depends on Orders and Products)
@@ -227,6 +184,10 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
+      },
+      amount: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
       },
       orderId: {
         field: 'order_id',
@@ -246,22 +207,20 @@ module.exports = {
         references: {
           model: PRODUCT_TABLE,
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       },
-      quantity: {
+      createdAt: {
         allowNull: false,
-        type: DataTypes.INTEGER
-      },
-      priceAtPurchase: {
-        field: 'price_at_purchase',
-        allowNull: false,
-        type: DataTypes.DECIMAL(10, 2)
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.NOW,
       }
     });
   },
 
   async down(queryInterface) {
-    // Drop tables in reverse order
     await queryInterface.dropTable(ORDER_PRODUCT_TABLE);
     await queryInterface.dropTable(ORDER_TABLE);
     await queryInterface.dropTable(PRODUCT_TABLE);

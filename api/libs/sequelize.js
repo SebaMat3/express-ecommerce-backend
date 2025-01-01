@@ -8,12 +8,6 @@ const { setupModels } = require('./../db/models');
 const options = {
   dialect: 'postgres',
   logging: config.isProd ? false : console.log,
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
 }
 
 if (config.isProd) {
